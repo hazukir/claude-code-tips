@@ -16,7 +16,7 @@ uncommitted=""
 if [[ -n "$cwd" && -d "$cwd" ]]; then
     branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
     if [[ -n "$branch" ]]; then
-        file_count=$(git -C "$cwd" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+        file_count=$(git -C "$cwd" --no-optional-locks status --porcelain 2>/dev/null | wc -l | tr -d ' ')
         if [[ "$file_count" -eq 0 ]]; then
             uncommitted="(0 files uncommitted)"
         elif [[ "$file_count" -eq 1 ]]; then
