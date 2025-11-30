@@ -1,4 +1,4 @@
-# 30 Claude Code Tips: From Basics to Advanced
+# 30 Claude Code Tips: From Basics to Advanced (Work in Progress - 4 tips so far)
 
 ## Tip 0: Customize your status line
 
