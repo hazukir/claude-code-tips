@@ -77,14 +77,11 @@ if [[ -n "$transcript_path" && -f "$transcript_path" ]]; then
     baseline=18000
     bar_width=10
 
-    # Subtract baseline to get conversation-only tokens
-    conversation_tokens=$((context_length - baseline))
-    [[ $conversation_tokens -lt 0 ]] && conversation_tokens=0
-
-    if [[ "$conversation_tokens" -gt 0 ]]; then
-        pct=$((conversation_tokens * 100 / max_context))
+    if [[ "$context_length" -gt 0 ]]; then
+        pct=$((context_length * 100 / max_context))
     else
-        pct=0
+        # At conversation start, ~18k baseline is already loaded
+        pct=$((baseline * 100 / max_context))
     fi
 
     [[ $pct -gt 100 ]] && pct=100
@@ -104,7 +101,7 @@ if [[ -n "$transcript_path" && -f "$transcript_path" ]]; then
 
     ctx="${bar} ${pct}% of 155k tokens used (/context)"
 else
-    ctx="░░░░░░░░░░ 0% of 155k tokens used (/context)"
+    ctx="█░░░░░░░░░ 11% of 155k tokens used (/context)"
 fi
 
 # Build output: Model | Dir | Branch (uncommitted) | Context
