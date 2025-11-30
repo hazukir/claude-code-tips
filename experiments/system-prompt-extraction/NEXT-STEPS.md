@@ -1,21 +1,24 @@
 # System Prompt Slimming - Handoff Document
 
 ## Goal
-Reduce Claude Code's system prompt by ~45%. Currently at ~23% reduction (12KB saved).
+Reduce Claude Code's system prompt by ~45%. Currently at ~40% reduction (20KB saved).
 
 ## Current Progress
 
 ### What's Been Done
 - **Backup/restore system**: `backup-cli.sh` and `restore-cli.sh` with SHA256 verification
 - **Patch system**: `patch-cli.js` that restores from backup then applies patches (idempotent)
-- **7 patches applied**, saving ~23% (~12KB):
+- **10 patches applied**, saving ~40% (~20KB):
   1. Removed duplicate emoji instruction from Edit tool
   2. Removed duplicate emoji instruction from Write tool
   3. Slimmed TodoWrite examples from 8 verbose to 2 concise
-  4. Slimmed EnterPlanMode examples from 6 to 2
-  5. Simplified git commit section (3.8KB to 0.6KB)
-  6. Simplified PR creation section (2.2KB to 0.4KB)
-  7. Removed Code References section (363 bytes)
+  4. Slimmed TodoWrite states section (1.8KB to 0.4KB)
+  5. Slimmed EnterPlanMode examples from 6 to 2
+  6. Slimmed Bash tool description (3.7KB to 0.6KB)
+  7. Slimmed Task tool description (4.1KB to 0.6KB)
+  8. Simplified git commit section (3.8KB to 0.6KB)
+  9. Simplified PR creation section (2.2KB to 0.4KB)
+  10. Removed Code References section (363 bytes)
 
 ### What Worked
 - **File-based patches**: Large find/replace strings stored in `patches/*.find.txt` and `patches/*.replace.txt`
@@ -26,23 +29,17 @@ Reduce Claude Code's system prompt by ~45%. Currently at ~23% reduction (12KB sa
 - **Template literals for large strings**: Embedding 6KB strings in JS template literals caused matching issues (whitespace/encoding differences)
 - **Solution**: Load large patches from external `.txt` files instead
 
-## Remaining Tasks (~22% more savings needed)
+## Remaining Tasks (~5% more savings needed)
 
-All major simplifications have been done. To get closer to 45%, consider:
+To reach 45%, consider:
 
-### 1. Tool descriptions (~15-20%) - NEXT PRIORITY
-The tool descriptions (Bash, Glob, Grep, Read, Edit, Write, etc.) are verbose. Each could be condensed.
+### 1. TodoWrite "When to Use" sections (~1.2KB)
+The When to Use and When NOT to Use sections are verbose and could be combined/condensed.
 
-**Start here in the next session.** Extract tool descriptions from backup, create slimmed versions, test carefully since these directly affect how Claude uses tools.
-
-### 2. AskUserQuestion tool (~2%)
-Has detailed usage notes that could be simplified.
-
-### 3. Task/Agent tool (~3%)
-Has extensive examples and agent type descriptions.
-
-### 4. Further git/PR simplification
-The simplified versions could be made even more terse if needed.
+### 2. Other tool descriptions
+- WebFetch: 1.2KB, could save ~500 chars
+- WebSearch: 1.2KB, could save ~500 chars
+- SlashCommand: 1.4KB, could save ~600 chars
 
 ## How to Add a New Patch
 
@@ -117,7 +114,7 @@ experiments/system-prompt-extraction/
 
 ## Key Numbers
 - Original prompt: 830 lines, 52,590 chars
-- Current (after 7 patches): ~640 lines, ~40,700 chars
-- Savings: 11,900 bytes (~23% of system prompt)
+- Current (after 10 patches): ~540 lines, ~31,400 chars
+- Savings: ~20KB (~40% of system prompt)
 - Target (~45% reduction): ~457 lines, ~29,000 chars
-- Still need to save: ~11,700 chars (~22% more)
+- Still need to save: ~2,400 chars (~5% more)
