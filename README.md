@@ -388,6 +388,8 @@ I wanted to specifically create a separate tip for this because it's been really
 
 Once you identify what the particular problem was, you can just create a draft PR and go through some of the tips I mentioned earlier - check the output, make sure it looks good, let it verify its own outputs, and then turn it into a real PR to actually fix the issue. It's been working really well for me personally.
 
+You can sometimes combine some of these things together too. For example, if you want to edit one of your PR descriptions, instead of having it edit directly (which it might mess up), you can have it put the content into a local file first, let it edit it, and then let it copy and paste it back into the GitHub PR. That works really well. Or if you want to do that yourself, you can just ask it to open it in VS Code or give it to you via pbcopy so you can copy and paste it manually.
+
 ---
 
 📺 **Related talk**: [Claude Code Masterclass](https://youtu.be/9UdZhTnMrTA) - lessons and project examples from 31 months of agentic coding
