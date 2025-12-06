@@ -60,7 +60,7 @@ Since I use the terminal more because of Claude Code, I found it helpful to set 
 - `c` for Claude Code (this is the one I use the most)
 - `gb` for GitHub Desktop
 - `co` for VS Code
-- `q` for going to the project directory where I have most projects. From there I can manually cd into an individual folder to work on that project, or I can just launch Claude Code with `c` to let it basically have access to any project it wants to access.
+- `q` for going to the project directory where I have most projects. From there I can manually cd into an individual folder to work on that project, or I can just launch Claude Code with `c` to let it basically have access to any project it needs to access.
 
 To set these up, add lines like this to your shell config file (`~/.zshrc` or `~/.bashrc`):
 
