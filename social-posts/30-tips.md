@@ -321,11 +321,11 @@ Regular sessions are more for methodical work where you control the permissions 
 
 This is useful for research or experimentation, things that take a long time and maybe could be risky. A good example is the Reddit research workflow from Tip 10, where the reddit-fetch skill goes back and forth with Gemini CLI through tmux. Running that unsupervised is risky on your main system, but in a container, if something goes wrong, it's contained.
 
-Another example is how I created the [system prompt patching scripts](https://github.com/ykdojo/claude-code-tips/tree/main/system-prompt) in this repo. When a new version of Claude Code comes out, I need to update the patches for the minified CLI bundle. Instead of running Claude Code with `--dangerously-skip-permissions` on my host machine (where it has access to everything), I run it in a container. Claude Code can explore the minified JavaScript, find the variable mappings, and create new patch files without me approving every little thing that way.
+Another example is how I created [these system prompt patching scripts](https://github.com/ykdojo/claude-code-tips/tree/main/system-prompt). When a new version of Claude Code comes out, I need to update the patches for the minified CLI bundle. Instead of running Claude Code with `--dangerously-skip-permissions` on my host machine (where it has access to everything), I run it in a container. Claude Code can explore the minified JavaScript, find the variable mappings, and create new patch files without me approving every little thing that way.
 
 In fact, it was able to complete the migration pretty much on its own. It tried applying the patches, found that some didn't work with the new version, iterated to fix them, and even improved the [instruction document](https://github.com/ykdojo/claude-code-tips/blob/main/system-prompt/UPGRADING.md) for future instances based on what it learned.
 
-I set up a Docker container with Claude Code, Gemini CLI, tmux, and all the customizations from this repo. Check out the [container folder](https://github.com/ykdojo/claude-code-tips/tree/main/container) for the Dockerfile and setup instructions.
+I set up a Docker container with Claude Code, Gemini CLI, tmux, and all the customizations from [this repo](https://github.com/ykdojo/claude-code-tips). Check out the [container folder](https://github.com/ykdojo/claude-code-tips/tree/main/container) for the Dockerfile and setup instructions.
 
 ### Advanced: Orchestrating a worker Claude Code in a container
 
