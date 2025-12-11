@@ -1,9 +1,8 @@
 # Upgrading to a New Claude Code Version
 
-This project patches the Claude Code CLI to reduce system prompt token usage. When Claude Code updates, minified variable names change, breaking existing patches. This guide walks through updating the extraction script, patches, and patch script for a new version.
+This project patches the Claude Code CLI to reduce system prompt token usage. When Claude Code updates, minified variable names change, breaking existing patches. This guide walks through updating patches for a new version.
 
 **Key files:**
-- `extract-system-prompt.js` - extracts readable prompt from minified CLI
 - `patch-cli.js` - applies patches to reduce prompt size
 - `backup-cli.sh` - creates backup of original CLI (with hash validation)
 - `restore-cli.sh` - restores CLI from backup
@@ -158,147 +157,28 @@ done
 
 ---
 
-## Manual Method
-
-## 1. Update Claude Code
-
-```bash
-npm update -g @anthropic-ai/claude-code
-claude --version
-```
-
-## 2. Create new version folder
-
-```bash
-mkdir 2.0.XX && cd 2.0.XX && mkdir patches
-```
-
-## 3. Copy and update extraction script
-
-```bash
-cp ../PREV_VERSION/extract-system-prompt.js .
-```
-
-**Important:** Minified variable names change between versions. Update the mappings:
-
-```bash
-# Find tool variable assignments
-grep -oE '[A-Za-z0-9_]{2,4}="(Task|Bash|Read|Edit|Write|Glob|Grep|TodoWrite|WebFetch|WebSearch)"' \
-  "$(which claude | xargs realpath | xargs dirname)/cli.js" | sort -u
-
-# Find object.name patterns
-grep -oE '[a-zA-Z0-9_]+={name:[A-Za-z0-9_]+' "$(which claude | xargs realpath | xargs dirname)/cli.js" | head -20
-
-# Find agentType patterns
-grep -oE '[A-Za-z0-9_]+={agentType:"[^"]*"' "$(which claude | xargs realpath | xargs dirname)/cli.js"
-```
-
-Update `VAR_MAP` and `replaceVariables()` with new mappings.
-
-If a tool isn't extracted, its description may have changed:
-```bash
-grep -oE 'Launch.{0,60}agent' "$(which claude | xargs realpath | xargs dirname)/cli.js"
-```
-
-## 4. Extract and diff
-
-```bash
-node extract-system-prompt.js system-prompt-original-unpatched.md
-diff ../PREV_VERSION/system-prompt-original-unpatched.md system-prompt-original-unpatched.md
-```
-
-Look for:
-- Actual prompt changes (new instructions, modified wording)
-- Extraction bugs (`[DYNAMIC]` = unmapped variables)
-
-If you see wrong tool names or `[DYNAMIC]` in unexpected places, iterate on the mappings until the diff shows only real changes.
-
-## 5. Copy and update patch-cli.js
-
-```bash
-cp ../PREV_VERSION/patch-cli.js .
-```
-
-Update `EXPECTED_VERSION`, `EXPECTED_HASH` (run `shasum -a 256` on cli.js), and `findClaudeCli()` if the installation path changed.
-
-## 5b. Copy and update backup/restore scripts
-
-```bash
-cp ../PREV_VERSION/backup-cli.sh .
-cp ../PREV_VERSION/restore-cli.sh .
-```
-
-Update `EXPECTED_VERSION` and `EXPECTED_HASH` in `backup-cli.sh` to match `patch-cli.js`:
-
-```bash
-# Get hash from cli.js
-shasum -a 256 "$(which claude | xargs realpath | xargs dirname)/cli.js"
-
-# Update backup-cli.sh with new version and hash
-sed -i '' \
-  -e 's/EXPECTED_VERSION=".*"/EXPECTED_VERSION="2.0.YY"/' \
-  -e 's/EXPECTED_HASH=".*"/EXPECTED_HASH="NEW_HASH_HERE"/' \
-  backup-cli.sh
-```
-
-Note: `restore-cli.sh` doesn't need hash updates - it just copies the backup back.
-
-## 6. Update existing patches
-
-**Critical:** Update variable names in BOTH `*.find.txt` AND `*.replace.txt` files!
-
-The replace files contain variable references like `${r8}` that must match the new version. Old variable names cause runtime crashes or corrupted prompts.
-
-### Finding all variable mappings
-
-Use Claude Code inside a container to help find mappings:
-
-```bash
-docker exec peaceful_lovelace claude --dangerously-skip-permissions -p \
-  'Search the cli.js.backup for tool variable assignments like X="Bash".
-   List all tool variable names: Bash, Read, Write, Edit, Glob, Grep, Task,
-   TodoWrite, WebFetch, WebSearch, AskUserQuestion, BashOutput, KillShell.'
-```
-
-Common variable categories that change:
-- **Tool names:** `D9→U9` (Bash), `uY→cY` (Grep), `bX→fX` (Write)
-- **Object properties:** `tI.name→BY.name`, `In.name→Fn.name`, `d8.name→m8.name`
-- **Function names:** `KoA→woA`, `LGA→PGA`, `Ke→ze`, `oM6→LO6`
-- **Full function renames:** `vk3→Yy3`, `QFA→ZFA`, `RJ→vZ`
-- **Agent types:** `Sq.agentType→kq.agentType`
-- **Constants:** `Uf1→jf1`, `BH9→TH9`
-
-### Bulk update all patches
-
-```bash
-# Update BOTH find.txt AND replace.txt files!
-cd patches && sed -i '' \
-  -e 's/\${D9}/\${U9}/g' \
-  -e 's/\${uY}/\${cY}/g' \
-  -e 's/\${bX}/\${fX}/g' \
-  -e 's/\${tI\.name}/\${BY.name}/g' \
-  *.find.txt *.replace.txt
-```
-
-**Common mistakes:**
-1. Updating only `.find.txt` files - the `.replace.txt` files contain the SAME variables
-2. Missing function calls with expressions like `woA()/60000` - simple sed for `woA()` won't catch these. Use broader patterns: `s/woA()/zrA()/g` catches both `${woA()}` and `${woA()/60000}`
-
-## 7. Build new patches
-
-1. Find exact text in bundle
-2. Create `patches/name.find.txt` with that text
-3. Create `patches/name.replace.txt` with slimmed version
-4. Test: `node patch-cli.js`
-5. Verify: start Claude, run `/context`
-
-## 8. Update README
-
-Document patches and token savings.
-
----
-
 # Troubleshooting
+
+## Variable mappings reference
+
+When patches fail, it's usually because minified variable names changed. Common categories:
+- **Tool names:** `D9→U9` (Bash), `uY→cY` (Grep), `bX→fX` (Write)
+- **Object properties:** `tI.name→BY.name`, `In.name→Fn.name`
+- **Function names:** `KoA→woA`, `LGA→PGA`
+- **Full function renames:** `vk3→Yy3`, `S85→n75`
+- **Agent types:** `Sq.agentType→kq.agentType`
+
+To find new mappings, grep cli.js.backup:
+```bash
+grep -oE '[A-Za-z0-9_]{2,4}="(Task|Bash|Read|Edit|Write|Glob|Grep)"' cli.js.backup | sort -u
+```
+
+To bulk update patches:
+```bash
+sed -i 's/\${OLD}/\${NEW}/g' patches/*.find.txt patches/*.replace.txt
+```
+
+**Critical:** Update BOTH `*.find.txt` AND `*.replace.txt` files - they contain the same variables!
 
 ## Finding where patch text diverges
 
