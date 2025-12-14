@@ -3,6 +3,10 @@
 - Name: YK
 - GitHub: ykdojo
 
+# Behavior
+
+When I paste large content with no instructions, just summarize it.
+
 # Safety
 
 **NEVER use `--dangerously-skip-permissions` on the host machine.**
