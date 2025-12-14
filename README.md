@@ -1,4 +1,4 @@
-# 40 Claude Code Tips: From Basics to Advanced
+# 40+ Claude Code Tips: From Basics to Advanced
 
 Here are my tips for getting the most out of Claude Code, including a custom status line script, cutting the system prompt in half, using Gemini CLI as Claude Code's minion, and Claude Code running itself in a container.
 
@@ -43,8 +43,9 @@ Here are my tips for getting the most out of Claude Code, including a custom sta
 - [Tip 35: Ctrl+B to move commands to the background](#tip-35-ctrlb-to-move-commands-to-the-background)
 - [Tip 36: The era of personalized software is here](#tip-36-the-era-of-personalized-software-is-here)
 - [Tip 37: Navigating and editing your input box](#tip-37-navigating-and-editing-your-input-box)
-- [Tip 38: Share your knowledge and contribute where you can](#tip-38-share-your-knowledge-and-contribute-where-you-can)
-- [Tip 39: Keep learning!](#tip-39-keep-learning)
+- [Tip 38: Spend some time planning, but also prototype quickly](#tip-38-spend-some-time-planning-but-also-prototype-quickly)
+- [Tip 39: Share your knowledge and contribute where you can](#tip-39-share-your-knowledge-and-contribute-where-you-can)
+- [Tip 40: Keep learning!](#tip-40-keep-learning)
 
 <!-- /TOC -->
 
@@ -619,7 +620,17 @@ Or in `~/.claude/settings.json` (requires restart):
 }
 ```
 
-## Tip 38: Share your knowledge and contribute where you can
+## Tip 38: Spend some time planning, but also prototype quickly
+
+You want to spend enough time planning so that Claude Code knows what to build and how to build it. This means making high-level decisions early: what technology to use, how the project should be structured, where each functionality should live, which files things should go in. It's important to make good decisions as early as you can.
+
+Sometimes prototyping helps with that. Just by making a simple prototype quickly, you might be able to say "okay, this technology works for this particular purpose" or "this other technology works better."
+
+For example, I was recently experimenting with creating a diff viewer. I first tried a simple bash prototype with tmux and lazygit, then tried making my own git viewer with Ink and Node. I had a lot of trouble with different things and ended up not publishing any of these results. But what I got reminded of through this project is the importance of planning and prototyping. I found that just by planning a little bit better at the beginning before you let it write code, you're able to guide it better. You still need to guide it throughout the process of coding, but letting it plan a little first is really helpful.
+
+You can use plan mode for this by pressing Shift+Tab to switch to it. Or you can just ask Claude Code to make a plan before writing any code.
+
+## Tip 39: Share your knowledge and contribute where you can
 
 This tip is a bit different from the others. I found that by learning as much as you can, you're able to share your knowledge with people around you. Maybe through posts like these, maybe even books, courses, videos. I also recently had an internal session for my colleagues at Daft. It's been very rewarding.
 
@@ -634,7 +645,7 @@ When it comes to contributing, I've been sending issues to the Claude Code repo.
 
 It's kind of amazing how fast the team can react to feature requests and bug reports. But it makes sense because they're using Claude Code to build Claude Code itself.
 
-## Tip 39: Keep learning!
+## Tip 40: Keep learning!
 
 There are several effective ways to keep learning about Claude Code:
 
