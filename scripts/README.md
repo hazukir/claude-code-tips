@@ -36,8 +36,8 @@ That's it!
 The script supports optional color themes for the model name and progress bar. Edit the `COLOR` variable at the top of the script:
 
 ```bash
-# Color theme: default, orange, blue, teal, green, lavender
-COLOR="blue"
+# Color theme: gray, orange, blue, teal, green, lavender, rose, gold, slate, cyan
+COLOR="orange"
 ```
 
 Preview all options by running `bash scripts/color-preview.sh`:
