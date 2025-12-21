@@ -4,7 +4,7 @@ Here are my tips for getting the most out of Claude Code, including a custom sta
 
 📺 [Quick demo](https://www.youtube.com/watch?v=hiISl558JGE) - See some of these tips in action with a multi-Claude workflow and voice input:
 
-[![Demo video thumbnail](demo-thumbnail.png)](https://www.youtube.com/watch?v=hiISl558JGE)
+[![Demo video thumbnail](assets/demo-thumbnail.png)](https://www.youtube.com/watch?v=hiISl558JGE)
 
 <!-- TOC -->
 ## Table of Contents
@@ -83,7 +83,7 @@ You can get more accuracy by using a hosted service, but I found that a local mo
 
 For example, in this screenshot you can see that Claude was able to interpret mistranscribed words like "ExcelElanishMark" and "advast" correctly as "exclamation mark" and "Advanced":
 
-![Voice transcription mistakes interpreted correctly](voice-transcription-mistakes.png)
+![Voice transcription mistakes interpreted correctly](assets/voice-transcription-mistakes.png)
 
 I think the best way to think about this is like you're trying to communicate with your friend. Of course, you can communicate through texts. That might be easier for some people, or emails, right? That's totally fine. That's what most people seem to do with Claude Code. But if you want to communicate faster, why wouldn't you get on a quick phone call? You can just send voice messages. You don't need to literally have a phone call with Claude Code. Just send a bunch of voice messages. It's faster, at least for me, as someone who's practiced the art of speaking a lot over the past number of years. But I think for a majority of people, it's going to be faster too.
 
@@ -97,11 +97,11 @@ If you find that Claude Code isn't able to one-shot a difficult problem or codin
 
 Essentially, instead of going from A to B:
 
-![Direct approach](breakdown-direct.png)
+![Direct approach](assets/breakdown-direct.png)
 
 You can go from A to A1 to A2 to A3, then to B:
 
-![Step-by-step approach](breakdown-steps.png)
+![Step-by-step approach](assets/breakdown-steps.png)
 
 A good example of this is when I was building my own voice transcription system. I needed to build a system that could let the user select and download a model, take keyboard shortcuts, start transcribing, put the transcribed text at the user's cursor, and wrap all of this in a nice UI. That's a lot. So I broke it down into smaller tasks. First, I created an executable that would just download a model, nothing else. Then I created another one that would just record voice, nothing else. Then another one that would just transcribe pre-recorded audio. I completed them one by one like that before combining them at the end.
 
@@ -315,7 +315,7 @@ My personal method is what I would call a "cascade" - whenever I start a new tas
 
 Here's what my setup typically looks like:
 
-![Terminal tabs showing multitasking workflow](multitasking-terminal-tabs.png)
+![Terminal tabs showing multitasking workflow](assets/multitasking-terminal-tabs.png)
 
 In this example:
 1. **Leftmost tab** - A persistent tab running my voice transcription system (always stays here)
@@ -342,7 +342,7 @@ Here's what `/context` looks like before and after patching:
 
 | Unpatched (~18k, 9%) | Patched (~10k, 5%) |
 |---------------------|-------------------|
-| ![Unpatched context](system-prompt/context-unpatched.png) | ![Patched context](system-prompt/context-patched.png) |
+| ![Unpatched context](assets/context-unpatched.png) | ![Patched context](assets/context-patched.png) |
 
 The patches work by trimming verbose examples and redundant text from the minified CLI bundle while keeping all the essential instructions. For example, the TodoWrite examples go from 6KB to 0.4KB, and the Bash tool description drops from 3.7KB to 0.6KB.
 
@@ -374,7 +374,7 @@ This way the agent can continuously check the status and let you know once it's 
 
 For example, if you have a Docker build running in the background:
 
-![Manual exponential backoff checking Docker build progress](manual-exponential-backoff.png)
+![Manual exponential backoff checking Docker build progress](assets/manual-exponential-backoff.png)
 
 And it keeps going until the job completes.
 
@@ -386,7 +386,7 @@ Then I go through it line by line, pretty much. I say okay, let's take a look at
 
 So it's this sort of back-and-forth process, maybe with the terminal on the left and your code editor on the right:
 
-![Side-by-side writing workflow with Claude Code](writing-assistant-side-by-side.png)
+![Side-by-side writing workflow with Claude Code](assets/writing-assistant-side-by-side.png)
 
 That tends to work really well.
 
@@ -525,7 +525,7 @@ I think it's kind of interesting because the computer started with a text interf
 
 As I mentioned earlier, sometimes it's okay to stay at the vibe coding level. You don't necessarily have to worry about every single line of code if you're working on one-time projects or non-critical parts of the codebase. But other times, you want to dig in a little deeper - look at the file structure and functions, individual lines of code, even checking dependencies.
 
-![Vibe coding spectrum](vibe-coding-spectrum.png)
+![Vibe coding spectrum](assets/vibe-coding-spectrum.png)
 
 The key is that it's not binary. Some people say vibe coding is bad because you don't know what you're doing, but sometimes it's totally fine. But other times, it is helpful to dig deeper, use your software engineering skills, understand code at a granular level, or copy and paste parts of the codebase or specific error logs to ask Claude Code specific questions about them.
 
