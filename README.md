@@ -326,25 +326,25 @@ In this example:
 
 ## Tip 14: Slim down the system prompt
 
-Claude Code's system prompt and tool definitions take up about 18k tokens (~9% of your 200k context) before you even start working. I created a patch system that reduces this to about 10k tokens - saving around 7,300 tokens (41% of the static overhead, ~50% of the overall overhead).
+Claude Code's system prompt and tool definitions take up about 20k tokens (~10% of your 200k context) before you even start working. I created a patch system that reduces this to about 9k tokens - saving around 11,000 tokens (~55% of the overhead).
 
 | Component | Before | After | Savings |
 |-----------|--------|-------|---------|
-| System prompt | 2.9k | 2.0k | 900 tokens |
-| System tools | 14.7k | 8.3k | 6,400 tokens |
-| **Static total** | **~18k** | **~10k** | **~7,300 tokens (41%)** |
-| Allowed tools list | ~2.5-3.5k | 0 | ~2.5-3.5k tokens |
-| **Total** | **~21k** | **~10k** | **~10-11k tokens (~50%)** |
+| System prompt | 3.1k | 1.8k | 1,300 tokens |
+| System tools | 15.6k | 7.1k | 8,500 tokens |
+| **Static total** | **~19k** | **~9k** | **~10,000 tokens (~52.5%)** |
+| Allowed tools list | ~1k | 0 | ~1k tokens |
+| **Total** | **~20k** | **~9k** | **~11k tokens (~55%)** |
 
-The allowed tools list is dynamic context - it grows as you approve more bash commands. With 70+ approved commands, mine was eating up 2,500-3,500 tokens. The patch removes this list entirely.
+The allowed tools list is dynamic context - it grows as you approve more bash commands. The patch removes this list entirely.
 
 Here's what `/context` looks like before and after patching:
 
-| Unpatched (~18k, 9%) | Patched (~10k, 5%) |
-|---------------------|-------------------|
+| Unpatched (~20k, 10%) | Patched (~9k, 4%) |
+|----------------------|-------------------|
 | ![Unpatched context](assets/context-unpatched.png) | ![Patched context](assets/context-patched.png) |
 
-The patches work by trimming verbose examples and redundant text from the minified CLI bundle while keeping all the essential instructions. For example, the TodoWrite examples go from 6KB to 0.4KB, and the Bash tool description drops from 3.7KB to 0.6KB.
+The patches work by trimming verbose examples and redundant text from the minified CLI bundle while keeping all the essential instructions.
 
 I've tested this extensively and it works well. It feels more raw - more powerful, but maybe a little less regulated, which makes sense because the system instruction is shorter. It feels more like a pro tool when you use it this way. I really enjoy starting with lower context because you have more room before it fills up, which gives you the option to continue conversations a bit longer. That's definitely the best part of this strategy.
 
