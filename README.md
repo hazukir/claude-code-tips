@@ -340,9 +340,13 @@ The allowed tools list is dynamic context - it grows as you approve more bash co
 
 Here's what `/context` looks like before and after patching:
 
-| Unpatched (~20k, 10%) | Patched (~9k, 4%) |
-|----------------------|-------------------|
-| ![Unpatched context](assets/context-unpatched.png) | ![Patched context](assets/context-patched.png) |
+**Unpatched (~20k, 10%)**
+
+![Unpatched context](assets/context-unpatched.png)
+
+**Patched (~9k, 4%)**
+
+![Patched context](assets/context-patched.png)
 
 The patches work by trimming verbose examples and redundant text from the minified CLI bundle while keeping all the essential instructions.
 
