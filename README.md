@@ -165,6 +165,7 @@ Of course, you can run these commands yourself, but if you find yourself doing i
 Since I use the terminal more because of Claude Code, I found it helpful to set up short aliases so I can launch things quickly. Here are the ones I use:
 
 - `c` for Claude Code (this is the one I use the most)
+- `ch` for Claude Code with Chrome integration
 - `gb` for GitHub Desktop
 - `co` for VS Code
 - `q` for going to the project directory where I have most projects. From there I can manually cd into an individual folder to work on that project, or I can just launch Claude Code with `c` to let it basically have access to any project it needs to access.
@@ -173,6 +174,7 @@ To set these up, add lines like this to your shell config file (`~/.zshrc` or `~
 
 ```bash
 alias c='claude'
+alias ch='claude --chrome'
 alias gb='github'
 alias co='code'
 alias q='cd ~/Desktop/projects'
