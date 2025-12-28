@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "dx",
-      "source": ".",
+      "source": "./",
       "description": "Developer experience essentials: GitHub Actions debugging, conversation cloning, context handoffs, and Reddit research",
       "version": "1.0.0"
     }
