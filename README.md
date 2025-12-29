@@ -754,8 +754,8 @@ After installing, the commands are available as `/dx:clone`, `/dx:handoff`, and 
 
 ---
 
-📝 **Story**: [How I got a full-time job with Claude Code](content/how-i-got-a-job-with-claude-code.md)
-
 📺 **Related talk**: [Claude Code Masterclass](https://youtu.be/9UdZhTnMrTA) - lessons and project examples from 31 months of agentic coding
+
+📝 **Story**: [How I got a full-time job with Claude Code](content/how-i-got-a-job-with-claude-code.md)
 
 📰 **Newsletter**: [Agentic Coding with Discipline and Skill](https://agenticcoding.substack.com/) - bring the practice of agentic coding to the next level
