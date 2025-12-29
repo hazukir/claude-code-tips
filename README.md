@@ -181,7 +181,7 @@ alias co='code'
 alias q='cd ~/Desktop/projects'
 ```
 
-Once you have the `c` alias, you can combine it with flags: `c -c` continues your last conversation, and `c -r` shows a list of recent conversations to resume.
+Once you have these aliases, you can combine them with flags: `c -c` continues your last conversation, and `c -r` shows a list of recent conversations to resume. These work with `ch` too (`ch -c`, `ch -r`) for Chrome sessions.
 
 ## Tip 7: Proactively compact your context
 
