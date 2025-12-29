@@ -142,9 +142,9 @@ if [[ -n "$transcript_path" && -f "$transcript_path" ]]; then
         fi
     done
 
-    ctx="${bar} ${C_GRAY}${pct}% of ${max_k}k tokens used"
+    ctx="${bar} ${C_GRAY}${pct}% of ${max_k}k tokens"
 else
-    ctx="${C_ACCENT}█${C_BAR_EMPTY}░░░░░░░░░ ${C_GRAY}~10% of ${max_k}k tokens used"
+    ctx="${C_ACCENT}█${C_BAR_EMPTY}░░░░░░░░░ ${C_GRAY}~10% of ${max_k}k tokens"
 fi
 
 # Build output: Model | Dir | Branch (uncommitted) | Context
@@ -159,7 +159,7 @@ if [[ -n "$transcript_path" && -f "$transcript_path" ]]; then
     # Calculate visible length (without ANSI codes) - 10 chars for bar + content
     plain_output="${model} | 📁${dir}"
     [[ -n "$branch" ]] && plain_output+=" | 🔀${branch} ${git_status}"
-    plain_output+=" | xxxxxxxxxx ${pct}% of ${max_k}k tokens used"
+    plain_output+=" | xxxxxxxxxx ${pct}% of ${max_k}k tokens"
     max_len=${#plain_output}
     last_user_msg=$(jq -rs '
         # Messages to skip (not useful as context)

@@ -6,7 +6,7 @@ A two-line status line script for Claude Code that shows model, directory, git b
 
 **Example output:**
 ```
-Opus 4.5 | 📁claude-code-tips | 🔀main (scripts/context-bar.sh uncommitted, synced 12m ago) | ██░░░░░░░░ 18% of 200k tokens used
+Opus 4.5 | 📁claude-code-tips | 🔀main (scripts/context-bar.sh uncommitted, synced 12m ago) | ██░░░░░░░░ 18% of 200k tokens
 💬 This is good. I don't think we need to change the documentation as long as we don't say that the default color is orange el...
 ```
 
