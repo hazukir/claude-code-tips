@@ -77,19 +77,16 @@ To set this up, you can use [this sample script](scripts/context-bar.sh) and che
 Type `/usage` to see detailed information about your rate limits:
 
 ```
-> /usage
-─────────────────────────────────────────────────────
- Current session · Resets 10pm (Asia/Tokyo)
- ████████▊
- 17% used
+ Current session
+ ███████                                            14% used
+ Resets 3:59pm (Asia/Tokyo)
 
- Current week (all models) · Resets Jan 3, 2026, 6am
- ██████████▊
- 21% used
+ Current week (all models)
+ █████████████                                      26% used
+ Resets Jan 3, 2026, 5:59am (Asia/Tokyo)
 
  Current week (Sonnet only)
-
- 0% used
+                                                    0% used
 
  Extra usage
  Extra usage not enabled • /extra-usage to enable
