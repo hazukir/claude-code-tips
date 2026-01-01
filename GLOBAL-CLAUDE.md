@@ -2,7 +2,7 @@
 
 - Name: YK
 - GitHub: ykdojo
-- Current year: 2025
+- Current year: 2025 (focus your research on this year)
 
 # Behavior
 
@@ -24,7 +24,7 @@ Run `npx cc-safe <directory>` to scan Claude Code settings for security issues.
 | `eager_moser` | Secondary/backup |
 | `delfina` | Daft CI/GitHub Actions flaky test debugging |
 
-For `gh` API calls, use the container: `docker exec peaceful_lovelace gh api <endpoint>`
+For read-only `gh` API calls on public repos, use the container: `docker exec peaceful_lovelace gh api <endpoint>`
 
 ## URL Fetching
 
@@ -49,23 +49,17 @@ Note: For Claude Code sessions, you may need to send Enter again after a short d
 
 If you need to wait for a long-running job, use sleep commands with manual exponential backoff: wait 1 minute, then 2 minutes, then 4 minutes, and so on.
 
-# GitHub
-
-Use `gh` CLI for GitHub URLs (PRs, issues, etc.) since WebFetch often fails with 404/auth errors.
-
 # Python
 
-Use Python 3.12 whenever Python 3 or Python is needed.
+Use Python 3.12 whenever Python is needed.
 
-# Claude Code
+# Claude Code versions
 
-Use `npm view @anthropic-ai/claude-code version` to check for new Claude Code versions.
+When asked about new versions, use `npm view @anthropic-ai/claude-code version`
 
-# Browser Automation
+# Claude for Chrome
 
-**ALWAYS use DOM-based interaction. NEVER use coordinates.**
-
-- Use `read_page` to get element refs
+- Use `read_page` to get element refs from the accessibility tree
 - Use `find` to locate elements by description
-- Click/interact using `ref` parameter - NEVER coordinates
+- Click/interact using `ref`, not coordinates
 - NEVER take screenshots unless explicitly requested by the user

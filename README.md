@@ -114,6 +114,31 @@ Manage MCP (Model Context Protocol) servers:
     • /Users/yk/.claude.json
 ```
 
+### /stats
+
+View your usage statistics with a GitHub-style activity graph:
+
+```
+      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+      ·············································▒▒▒▓▒░█
+  Mon ··············································▒█░▓░█
+      ·············································▒▒██▓░█
+  Wed ·············································░▒█▒▓░█
+      ············································░▓▒█▓▓░
+  Fri ············································░▓░█▓▓█
+      ············································▓▒░█▓▒█
+
+      Less ░ ▒ ▓ █ More
+
+  Favorite model: Opus 4.5        Total tokens: 12.1m
+
+  Sessions: 1.8k                  Longest session: 20h 40m 45s
+  Current streak: 44 days         Longest streak: 45 days
+  Active days: 49/51              Peak hour: 17:00-18:00
+
+  You've used ~145x more tokens than Brave New World
+```
+
 ### /clear
 
 Clear the conversation and start fresh.
@@ -298,15 +323,26 @@ This is also an example of why your software engineering skills still matter. If
 
 Another example is simply writing tests. After you let Claude Code write some code, if you want to test it, you can just let it write tests for itself too. And let it run on its own and fix things if it can. Of course, it doesn't always go in the right direction and you need to supervise it sometimes, but it's able to do a surprising amount of coding tasks on its own.
 
+### Creative testing strategies
+
 Sometimes you need to be creative with how you complete the write-test cycle. For example, if you're building a web app, you could use Playwright MCP, Chrome DevTools MCP, or Claude's native browser integration (through `/chrome`). I haven't tried Chrome DevTools yet, but I've tried Playwright and Claude's native integration. Overall, Playwright generally works better. It does use a lot of context, but the 200k context window is normally enough for a single task or a few smaller tasks.
 
 The main difference between these two seems to be that Playwright focuses on the accessibility tree (structured data about page elements) rather than taking screenshots. It does have the ability to take screenshots, but it doesn't normally use them to take actions. On the other hand, Claude's native browser integration focuses more on taking screenshots and clicking on elements by specific coordinates. It can click on random things sometimes, and the whole process can be slow.
 
 This might improve over time, but by default I would go with Playwright for most tasks that aren't visually intensive. I'd only use Claude's native browser integration if I need to use a logged-in state without having to provide credentials (since it runs in your own browser profile), or if it specifically needs to click on things visually using their coordinates.
 
-One tip for improving Claude's native browser integration: you can ask it to click elements using their reference IDs instead of coordinates.
-
 This is why I disable Claude's native browser integration by default and use it through the `ch` shortcut I defined previously. That way Playwright handles most browser tasks, and I only enable Claude's native integration when I specifically need it.
+
+Additionally, you can ask it to use accessibility tree refs instead of coordinates. Here's what I put in my CLAUDE.md for this:
+
+```markdown
+# Claude for Chrome
+
+- Use `read_page` to get element refs from the accessibility tree
+- Use `find` to locate elements by description
+- Click/interact using `ref`, not coordinates
+- NEVER take screenshots unless explicitly requested by the user
+```
 
 In my personal experience, I've also had a situation where I was working on a Python library at [Daft](https://github.com/Eventual-Inc/Daft) and needed to test a version I built locally on Google Colab. The trouble is it's hard to build a Python library with a Rust backend on Google Colab - it doesn't seem to work that well. So I needed to actually build a wheel locally and then upload it manually so that I could run it on Google Colab. I also tried monkey patching, which worked well in the short term before I had to wait for the whole wheel to build locally.
 

@@ -17,7 +17,7 @@
 | hesreallyhim/awesome-claude-code | 18k | Issue #424 (dx plugin) | Open but resolved | https://github.com/hesreallyhim/awesome-claude-code/issues/424 |
 | travisvn/awesome-claude-skills | 3.7k | PR #32 | Open | https://github.com/travisvn/awesome-claude-skills/pull/32 |
 | jqueryscript/awesome-claude-code | 85 | PR #9 | Open | https://github.com/jqueryscript/awesome-claude-code/pull/9 |
-| BoringDystopiaDevelopment/awesome-claude | 604 | PR #14 | Open | https://github.com/BoringDystopiaDevelopment/awesome-claude/pull/14 |
+| alvinunreal/awesome-claude | 616 | PR #14 | Merged | https://github.com/alvinunreal/awesome-claude/pull/14 |
 | ComposioHQ/awesome-claude-skills | 12k | PR #28 | Open | https://github.com/ComposioHQ/awesome-claude-skills/pull/28 |
 
 ## Not Submitting
