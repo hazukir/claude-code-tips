@@ -14,7 +14,7 @@
 | Repo | Stars | Type | Status | Link |
 |------|-------|------|--------|------|
 | hesreallyhim/awesome-claude-code | 18k | Issue #369 | Merged | https://github.com/hesreallyhim/awesome-claude-code/pull/426 |
-| hesreallyhim/awesome-claude-code | 18k | Issue #424 (dx plugin) | Open but resolved | https://github.com/hesreallyhim/awesome-claude-code/issues/424 |
+| hesreallyhim/awesome-claude-code | 18k | Issue #424 (dx plugin) | Closed | https://github.com/hesreallyhim/awesome-claude-code/issues/424 |
 | travisvn/awesome-claude-skills | 3.7k | PR #32 | Open | https://github.com/travisvn/awesome-claude-skills/pull/32 |
 | jqueryscript/awesome-claude-code | 85 | PR #9 | Open | https://github.com/jqueryscript/awesome-claude-code/pull/9 |
 | alvinunreal/awesome-claude | 616 | PR #14 | Merged | https://github.com/alvinunreal/awesome-claude/pull/14 |
@@ -33,7 +33,7 @@
 |-----------|-----------------|
 | claude-code-tips repo | hesreallyhim/awesome-claude-code (merged) |
 | dx plugin (full) | anthropics/claude-plugins-official, hekmon8/awesome-claude-code-plugins |
-| dx as Tooling | hesreallyhim/awesome-claude-code (issue #424, pending) |
+| dx as Tooling | hesreallyhim/awesome-claude-code (issue #424, closed) |
 | reddit-fetch skill | travisvn/awesome-claude-skills |
 | Commands (gha, handoff, clone) | Bundled in plugin submissions |
 
