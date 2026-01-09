@@ -43,21 +43,21 @@ docker exec peaceful_lovelace claude --version  # verify new version
 
 ```bash
 # Copy previous version's patches to container
-docker cp system-prompt/2.0.XX peaceful_lovelace:/home/claude/projects/
+docker cp system-prompt/2.X.OLD peaceful_lovelace:/home/claude/projects/
 
 # Create new version folder from previous
 # Note: chown is needed because files copied from host keep host UID
 docker exec -u root peaceful_lovelace bash -c "
-  cp -r /home/claude/projects/2.0.XX /home/claude/projects/2.0.YY
+  cp -r /home/claude/projects/2.X.OLD /home/claude/projects/2.X.NEW
   chown -R claude:claude /home/claude/projects/"
 
-# Create backup of new cli.js
+# Create backup of new cli.js (IMPORTANT: use the system's freshly installed cli.js)
 docker exec peaceful_lovelace bash -c "
   cp /usr/local/lib/node_modules/@anthropic-ai/claude-code/cli.js \
-     /home/claude/projects/2.0.YY/cli.js.backup"
+     /home/claude/projects/2.X.NEW/cli.js.backup"
 
 # Get the hash for patch-cli.js
-docker exec peaceful_lovelace sha256sum /home/claude/projects/2.0.YY/cli.js.backup
+docker exec peaceful_lovelace sha256sum /home/claude/projects/2.X.NEW/cli.js.backup
 ```
 
 ### Step 3: Update patch-cli.js version and hash
@@ -66,9 +66,9 @@ Either manually edit or have Claude do it:
 ```bash
 # Update EXPECTED_VERSION and EXPECTED_HASH in patch-cli.js
 docker exec peaceful_lovelace sed -i \
-  -e "s/EXPECTED_VERSION = '2.0.XX'/EXPECTED_VERSION = '2.0.YY'/" \
+  -e "s/EXPECTED_VERSION = '2.X.OLD'/EXPECTED_VERSION = '2.X.NEW'/" \
   -e "s/EXPECTED_HASH = '.*'/EXPECTED_HASH = 'NEW_HASH_HERE'/" \
-  /home/claude/projects/2.0.YY/patch-cli.js
+  /home/claude/projects/2.X.NEW/patch-cli.js
 ```
 
 ### Step 4: Let Claude fix the patches
@@ -77,7 +77,7 @@ Start a Claude session in tmux (so you can monitor progress):
 
 ```bash
 docker exec peaceful_lovelace tmux new-session -d -s upgrade \
-  'cd /home/claude/projects/2.0.YY && claude --dangerously-skip-permissions'
+  'cd /home/claude/projects/2.X.NEW && claude --dangerously-skip-permissions'
 
 # Wait for it to start, then send the task
 sleep 4
@@ -104,7 +104,7 @@ Once patches work locally, apply to the actual Claude installation and **run the
 
 ```bash
 # Apply patches to real cli.js (needs root)
-docker exec -u root peaceful_lovelace node /home/claude/projects/2.0.YY/patch-cli.js
+docker exec -u root peaceful_lovelace node /home/claude/projects/2.X.NEW/patch-cli.js
 
 # Test /context works
 docker exec peaceful_lovelace tmux new-session -d -s test 'claude --dangerously-skip-permissions'
@@ -120,21 +120,31 @@ docker exec peaceful_lovelace tmux capture-pane -t test -p -S -30
 
 ```bash
 # Create folder on host
-mkdir -p system-prompt/2.0.YY/patches
+mkdir -p system-prompt/2.X.NEW/patches
 
 # Copy from container (exclude the large cli.js.backup)
-docker cp peaceful_lovelace:/home/claude/projects/2.0.YY/patch-cli.js system-prompt/2.0.YY/
-docker cp peaceful_lovelace:/home/claude/projects/2.0.YY/patches/. system-prompt/2.0.YY/patches/
+docker cp peaceful_lovelace:/home/claude/projects/2.X.NEW/patch-cli.js system-prompt/2.X.NEW/
+docker cp peaceful_lovelace:/home/claude/projects/2.X.NEW/patches/. system-prompt/2.X.NEW/patches/
 
 # Copy and update backup/restore scripts
-cp system-prompt/2.0.XX/backup-cli.sh system-prompt/2.0.YY/
-cp system-prompt/2.0.XX/restore-cli.sh system-prompt/2.0.YY/
+cp system-prompt/2.X.OLD/backup-cli.sh system-prompt/2.X.NEW/
+cp system-prompt/2.X.OLD/restore-cli.sh system-prompt/2.X.NEW/
 
 # Update version and hash in backup-cli.sh (use same hash as patch-cli.js)
 sed -i '' \
-  -e 's/EXPECTED_VERSION="2.0.XX"/EXPECTED_VERSION="2.0.YY"/' \
+  -e 's/EXPECTED_VERSION="2.X.OLD"/EXPECTED_VERSION="2.X.NEW"/' \
   -e 's/EXPECTED_HASH="[^"]*"/EXPECTED_HASH="NEW_HASH_HERE"/' \
-  system-prompt/2.0.YY/backup-cli.sh
+  system-prompt/2.X.NEW/backup-cli.sh
+
+# Optional: Clean up unused patch files (patches not listed in patch-cli.js)
+# Find patches used in patch-cli.js
+grep "file: '" system-prompt/2.X.NEW/patch-cli.js | sed "s/.*file: '\([^']*\)'.*/\1/" | sort > /tmp/used.txt
+# Find all patch files
+ls system-prompt/2.X.NEW/patches/*.find.txt | xargs -n1 basename | sed 's/\.find\.txt$//' | sort > /tmp/all.txt
+# Remove unused patches
+for p in $(comm -23 /tmp/all.txt /tmp/used.txt); do
+  rm -v "system-prompt/2.X.NEW/patches/${p}.find.txt" "system-prompt/2.X.NEW/patches/${p}.replace.txt"
+done
 ```
 
 ### Step 7: Apply to host and other containers
@@ -142,16 +152,16 @@ sed -i '' \
 ```bash
 # Host
 npm update -g @anthropic-ai/claude-code
-cd system-prompt/2.0.YY && ./backup-cli.sh && node patch-cli.js
+cd system-prompt/2.X.NEW && ./backup-cli.sh && node patch-cli.js
 
 # Other containers (update Claude first, then patch)
 # Check ~/.claude/CLAUDE.md for current container list
-for container in eager_moser daphne delfina; do
+for container in eager_moser delfina; do
   docker exec -u root $container npm install -g @anthropic-ai/claude-code@latest
-  docker cp system-prompt/2.0.YY $container:/tmp/
+  docker cp system-prompt/2.X.NEW $container:/tmp/
   docker exec -u root $container cp /usr/local/lib/node_modules/@anthropic-ai/claude-code/cli.js \
     /usr/local/lib/node_modules/@anthropic-ai/claude-code/cli.js.backup
-  docker exec -u root $container node /tmp/2.0.YY/patch-cli.js
+  docker exec -u root $container node /tmp/2.X.NEW/patch-cli.js
 done
 ```
 
@@ -160,6 +170,25 @@ done
 ---
 
 # Troubleshooting
+
+## Stale backup from previous session
+
+If the container has files from a previous upgrade session, the `cli.js.backup` in the project folder may have a different hash than the freshly installed system CLI. This causes patches to fail when applied to the real installation.
+
+**Symptoms:**
+- Patches apply successfully to local test file but fail on system CLI
+- Hash mismatch errors when running `patch-cli.js` on the real installation
+- Container Claude reports "58/58 patches applied" but system shows "44/58"
+
+**Solution:** Always copy the fresh system backup to the project folder:
+```bash
+docker exec -u root peaceful_lovelace cp \
+  /usr/local/lib/node_modules/@anthropic-ai/claude-code/cli.js \
+  /home/claude/projects/2.X.NEW/cli.js.backup
+docker exec -u root peaceful_lovelace chown claude:claude /home/claude/projects/2.X.NEW/cli.js.backup
+```
+
+Then update the hash in `patch-cli.js` to match and have container Claude re-fix the patches.
 
 ## How regex matching works
 
@@ -345,7 +374,7 @@ Use this to verify a version upgrade is complete. Works for humans or Claude in 
 
 ```bash
 # Run this in container after applying patches
-cd /home/claude/projects/2.0.YY
+cd /home/claude/projects/2.X.NEW
 
 echo "=== File Check ==="
 ls -la patch-cli.js backup-cli.sh restore-cli.sh patches/*.find.txt | head -5
