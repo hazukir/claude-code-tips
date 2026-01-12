@@ -90,6 +90,8 @@ Check your rate limits:
  Resets Jan 3, 2026, 5:59am (Asia/Tokyo)
 ```
 
+If you want to watch your usage closely, keep it open in a tab and use Tab then Shift+Tab or ← then → to refresh.
+
 ### /chrome
 
 Toggle Claude's native browser integration:
