@@ -745,14 +745,14 @@ This is useful when you realize a command is taking longer than expected and you
 
 Claude Code also has the ability to run subagents in the background. If you need to do long-running research or have an agent check on something periodically, you don't have to keep it running in the foreground. Just ask Claude Code to run an agent or task in the background, and it'll handle it while you continue with other work.
 
-### Using sub-agents strategically
+### Using subagents strategically
 
-Beyond just running things in the background, sub-agents are useful when you have a large task to break down. For example, if you have a huge codebase that you need to analyze, you can have sub-agents analyze it in different ways or look at different parts of the codebase in parallel. Just ask Claude to spawn multiple sub-agents to handle different pieces.
+Beyond just running things in the background, subagents are useful when you have a large task to break down. For example, if you have a huge codebase that you need to analyze, you can have subagents analyze it in different ways or look at different parts of the codebase in parallel. Just ask Claude to spawn multiple subagents to handle different pieces.
 
-You can customize sub-agents by just asking:
+You can customize subagents by just asking:
 - **How many** - ask Claude to spawn the number you want
 - **Background vs foreground** - ask to run them in the background, or press Ctrl+B
-- **Which model** - ask for Opus, Sonnet, or Haiku depending on the complexity of each task (sub-agents default to Sonnet)
+- **Which model** - ask for Opus, Sonnet, or Haiku depending on the complexity of each task (subagents default to Sonnet)
 
 ## Tip 37: The era of personalized software is here
 
@@ -858,7 +858,7 @@ It's kind of amazing how fast the team can react to feature requests and bug rep
 
 There are several effective ways to keep learning about Claude Code:
 
-**Ask Claude Code itself** - If you have a question about Claude Code, just ask it. Claude Code has a specialized sub-agent for answering questions about its own features, slash commands, settings, hooks, MCP servers, and more.
+**Ask Claude Code itself** - If you have a question about Claude Code, just ask it. Claude Code has a specialized subagent for answering questions about its own features, slash commands, settings, hooks, MCP servers, and more.
 
 **Check the release notes** - Type `/release-notes` to see what's new in your current version. This is the best way to learn about the latest features.
 
