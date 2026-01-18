@@ -382,7 +382,7 @@ All of these are investments in the tools you use to build whatever you want to 
 
 ## Tip 13: Search through your conversation history
 
-You can ask Claude Code about your past conversations, and it'll help you find and search through them. All your conversation history is stored locally in `~/.claude/`. Project-specific conversations are in `~/.claude/projects/`, with folder names based on the project path (slashes become dashes).
+You can ask Claude Code about your past conversations, and it'll help you find and search through them. Your conversation history is stored locally in `~/.claude/projects/`, with folder names based on the project path (slashes become dashes).
 
 For example, conversations for a project at `/Users/yk/Desktop/projects/claude-code-tips` would be stored in:
 
