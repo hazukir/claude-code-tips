@@ -55,10 +55,6 @@ Note: For Claude Code sessions, you may need to send Enter again after a short d
 
 If you need to wait for a long-running job, use sleep commands with manual exponential backoff: wait 1 minute, then 2 minutes, then 4 minutes, and so on.
 
-# Python
-
-Use Python 3.12 whenever Python is needed.
-
 # Claude Code versions
 
 When asked about new versions, use `npm view @anthropic-ai/claude-code version`
