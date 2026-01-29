@@ -99,13 +99,11 @@ get_project_from_conv_file() {
     echo "$project_dirname" | sed 's|^-|/|' | sed 's|-|/|g'
 }
 
-# Pre-generate UUIDs for the awk script
+# Pre-generate UUIDs for the awk script using hexdump (much faster than uuidgen loop)
 pre_generate_uuids() {
     local count="$1"
     local output_file="$2"
-    for ((i=0; i<count; i++)); do
-        generate_uuid
-    done > "$output_file"
+    hexdump -vn $((count * 16)) -e '4/1 "%02x" "-" 2/1 "%02x" "-" 2/1 "%02x" "-" 2/1 "%02x" "-" 6/1 "%02x" "\n"' /dev/urandom > "$output_file"
 }
 
 clone_conversation() {
