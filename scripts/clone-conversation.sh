@@ -279,6 +279,9 @@ clone_conversation() {
     line_count=$(wc -l < "$target_file" | tr -d ' ')
     log_success "Wrote $line_count lines to $target_file"
 
+    # Touch the file to ensure it appears at the top of claude -r
+    touch "$target_file"
+
     # Update history.jsonl
     log_info "Updating history file..."
 

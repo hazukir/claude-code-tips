@@ -336,6 +336,9 @@ half_clone_conversation() {
     output_line_count=$(wc -l < "$target_file" | tr -d ' ')
     log_success "Wrote $output_line_count messages to $target_file"
 
+    # Touch the file to ensure it appears at the top of claude -r
+    touch "$target_file"
+
     # Update history.jsonl
     log_info "Updating history file..."
 
