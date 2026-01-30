@@ -406,12 +406,19 @@
       return slide.querySelectorAll('li');
     }
 
-    function initSlide(slide, itemCount) {
+    function initSlide(slide, itemCount, showAll) {
       if (slide.hasAttribute('data-progressive')) {
         const items = getProgressiveItems(slide);
         const type = slide.getAttribute('data-progressive');
         const startsEmpty = type === 'table' || type === 'subtitle';
-        const showCount = itemCount !== undefined ? itemCount : (startsEmpty ? 0 : 1);
+        let showCount;
+        if (showAll) {
+          showCount = items.length;
+        } else if (itemCount !== undefined) {
+          showCount = itemCount;
+        } else {
+          showCount = startsEmpty ? 0 : 1;
+        }
         items.forEach((item, i) => {
           if (i < showCount) item.classList.add('visible');
           else item.classList.remove('visible');
@@ -432,12 +439,12 @@
       window.location.hash = current + 1;
     }
 
-    function showSlide(n, bulletCount) {
+    function showSlide(n, itemCount, showAll) {
       if (n < 0 || n >= slides.length) return;
       slides[current].classList.remove('active');
       current = n;
       slides[current].classList.add('active');
-      initSlide(slides[current], bulletCount);
+      initSlide(slides[current], itemCount, showAll);
       progress.textContent = `${current + 1} / ${slides.length}`;
       updateHash();
     }
@@ -469,7 +476,7 @@
           return;
         }
       }
-      showSlide(current - 1);
+      showSlide(current - 1, undefined, true);
     }
 
     document.addEventListener('keydown', (e) => {
