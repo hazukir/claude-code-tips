@@ -14,7 +14,23 @@
 
 When I paste large content with no instructions, just summarize it.
 
-For a complex bash command, either run it as multiple individual commands, or put it in a bash script file and run it with `bash /tmp/<script>.sh`.
+For a complex bash command, break it down into multiple simple commands so the user doesn't have to approve each one individually. Alternatively, put it in a bash script file and run it with `bash /tmp/<script>.sh`.
+
+Example - instead of:
+```bash
+sleep 60 && ps aux | grep foo | wc -l && echo "---" && ls -la /some/path
+```
+
+Do this:
+```bash
+sleep 60
+```
+```bash
+ps aux | grep foo | wc -l
+```
+```bash
+ls -la /some/path
+```
 
 For git operations in other directories, use `cd <path> && git ...` instead of `git -C <path>`.
 
