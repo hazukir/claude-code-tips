@@ -92,6 +92,15 @@
       opacity: 1;
     }
 
+    .slide[data-progressive="subtitle"] .subtitle {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .slide[data-progressive="subtitle"] .subtitle.visible {
+      opacity: 1;
+    }
+
     .slide img {
       max-width: 85%;
       max-height: 75vh;
@@ -311,19 +320,19 @@
   </div>
 
   <!-- Slide 19: Be flexible -->
-  <div class="slide">
+  <div class="slide" data-progressive="subtitle">
     <h1>Be flexible</h1>
     <div class="subtitle">Master all four levels</div>
   </div>
 
   <!-- Slide 20: Context matters -->
-  <div class="slide">
+  <div class="slide" data-progressive="subtitle">
     <h2>Sometimes vibe coding is fine</h2>
     <div class="subtitle">Quick prototypes, one-off scripts, experiments</div>
   </div>
 
   <!-- Slide 21: High quality when needed -->
-  <div class="slide">
+  <div class="slide" data-progressive="subtitle">
     <h2>Sometimes you need high quality</h2>
     <div class="subtitle">Medical software, large-scale systems, mission-critical</div>
   </div>
@@ -344,7 +353,7 @@
   </div>
 
   <!-- Slide 25: Final -->
-  <div class="slide">
+  <div class="slide" data-progressive="subtitle">
     <h2>More tokens doesn't have to mean more slop</h2>
     <div class="subtitle">It could mean higher quality code, better research, better understanding</div>
   </div>
@@ -359,8 +368,12 @@
     let current = 0;
 
     function getProgressiveItems(slide) {
-      if (slide.getAttribute('data-progressive') === 'table') {
+      const type = slide.getAttribute('data-progressive');
+      if (type === 'table') {
         return slide.querySelectorAll('tr:not(:first-child)');
+      }
+      if (type === 'subtitle') {
+        return slide.querySelectorAll('.subtitle');
       }
       return slide.querySelectorAll('li');
     }
@@ -368,8 +381,9 @@
     function initSlide(slide, itemCount) {
       if (slide.hasAttribute('data-progressive')) {
         const items = getProgressiveItems(slide);
-        const isTable = slide.getAttribute('data-progressive') === 'table';
-        const showCount = itemCount !== undefined ? itemCount : (isTable ? 0 : 1);
+        const type = slide.getAttribute('data-progressive');
+        const startsEmpty = type === 'table' || type === 'subtitle';
+        const showCount = itemCount !== undefined ? itemCount : (startsEmpty ? 0 : 1);
         items.forEach((item, i) => {
           if (i < showCount) item.classList.add('visible');
           else item.classList.remove('visible');
@@ -419,8 +433,8 @@
       if (slide.hasAttribute('data-progressive')) {
         const items = getProgressiveItems(slide);
         const visible = Array.from(items).filter(i => i.classList.contains('visible'));
-        const isTable = slide.getAttribute('data-progressive') === 'table';
-        const minVisible = isTable ? 0 : 1;
+        const type = slide.getAttribute('data-progressive');
+        const minVisible = (type === 'table' || type === 'subtitle') ? 0 : 1;
         if (visible.length > minVisible) {
           visible[visible.length - 1].classList.remove('visible');
           updateHash();
