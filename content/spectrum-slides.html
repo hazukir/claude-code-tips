@@ -50,7 +50,7 @@
     .subtitle {
       font-size: 1.8rem;
       color: #888;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     .content {
@@ -116,7 +116,7 @@
     }
 
     .qr-label {
-      margin-top: 5px;
+      margin-top: -2px;
       font-size: 1.4rem;
       color: #888;
     }
@@ -316,21 +316,21 @@
         <td>None</td>
       </tr>
       <tr>
-        <td>Agentic + Discipline</td>
+        <td>Agentic Coding with Discipline</td>
         <td>Okay</td>
         <td>Faster</td>
         <td>Sufficient</td>
         <td>Brief</td>
       </tr>
       <tr>
-        <td>Agentic SE</td>
+        <td>Agentic Software Engineering</td>
         <td>Medium</td>
         <td>Fast</td>
         <td>Thorough</td>
         <td>One-shot</td>
       </tr>
       <tr>
-        <td>High-Quality SE</td>
+        <td>High-Quality Software Engineering</td>
         <td>High</td>
         <td>Decent</td>
         <td>Rock solid</td>
@@ -443,8 +443,8 @@
       if (n < 0 || n >= slides.length) return;
       slides[current].classList.remove('active');
       current = n;
-      slides[current].classList.add('active');
       initSlide(slides[current], itemCount, showAll);
+      slides[current].classList.add('active');
       progress.textContent = `${current + 1} / ${slides.length}`;
       updateHash();
     }
