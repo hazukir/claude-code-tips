@@ -2,8 +2,6 @@
 
 Boris Cherny, the creator of Claude Code, recently shared [10 tips on X](https://x.com/bcherny/status/2017742741636321619) sourced from the Claude Code team. Here's a quick summary I created with the help of Claude Code and Opus 4.5.
 
-Web version: https://ykdojo.github.io/claude-code-tips/content/boris-claude-code-tips
-
 ## 1. Do more in parallel
 
 Spin up 3-5 git worktrees, each running its own Claude session. This is the single biggest productivity unlock from the team. Some people set up shell aliases (za, zb, zc) to hop between worktrees in one keystroke.
@@ -46,4 +44,4 @@ Enable the "Explanatory" or "Learning" output style in `/config` to have Claude 
 
 ---
 
-I resonate with a lot of these tips, so I recommend trying out at least a few of them. If you're looking for more Claude Code tips, I have a repo with 45 tips of my own here: https://github.com/ykdojo/claude-code-tips
+I resonate with a lot of these tips, so I recommend trying out at least a few of them. If you're looking for more Claude Code tips, I have a repo with 45 tips of my own here: [claude-code-tips](https://github.com/ykdojo/claude-code-tips)
