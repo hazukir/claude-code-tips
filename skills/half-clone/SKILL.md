@@ -1,3 +1,8 @@
+---
+name: half-clone
+description: Clone the later half of the current conversation, discarding earlier context to reduce token usage while preserving recent work.
+---
+
 Clone the later half of the current conversation, discarding earlier context to reduce token usage while preserving recent work.
 
 Steps:

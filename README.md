@@ -313,7 +313,7 @@ Then start a fresh conversation. For the fresh agent, you can just give the path
 
 In subsequent conversations, you can ask the agent to update the document for the next agent.
 
-I've also created a `/handoff` slash command that automates this - it checks for an existing HANDOFF.md, reads it if present, then creates or updates it with the goal, progress, what worked, what didn't, and next steps. You can find it in the [commands folder](commands/handoff.md), or install it via the [dx plugin](#tip-44-install-the-dx-plugin).
+I've also created a `/handoff` slash command that automates this - it checks for an existing HANDOFF.md, reads it if present, then creates or updates it with the goal, progress, what worked, what didn't, and next steps. You can find it in the [skills folder](skills/handoff/SKILL.md), or install it via the [dx plugin](#tip-44-install-the-dx-plugin).
 
 **Alternative: Use plan mode**
 
@@ -636,7 +636,7 @@ The first message is tagged with `[CLONED <timestamp>]` (e.g., `[CLONED Jan 7 14
 To set it up manually, symlink both files:
 ```bash
 ln -s /path/to/this/repo/scripts/clone-conversation.sh ~/.claude/scripts/clone-conversation.sh
-ln -s /path/to/this/repo/commands/clone.md ~/.claude/commands/clone.md
+ln -s /path/to/this/repo/skills/clone ~/.claude/skills/clone
 ```
 
 Or install via the [dx plugin](#tip-44-install-the-dx-plugin) - no symlinks needed.
@@ -652,7 +652,7 @@ When a conversation gets too long, the [half-clone-conversation script](scripts/
 To set it up manually, symlink both files:
 ```bash
 ln -s /path/to/this/repo/scripts/half-clone-conversation.sh ~/.claude/scripts/half-clone-conversation.sh
-ln -s /path/to/this/repo/commands/half-clone.md ~/.claude/commands/half-clone.md
+ln -s /path/to/this/repo/skills/half-clone ~/.claude/skills/half-clone
 ```
 
 Or install via the [dx plugin](#tip-44-install-the-dx-plugin) - no symlinks needed.
@@ -748,7 +748,7 @@ Another one is letting it check itself, its own work. If it gives you some sort 
 
 I wanted to specifically create a separate tip for this because it's been really amazing for me. Whenever there are GitHub Actions CI failures, I just give it to Claude Code and say "dig into this issue, try to find the root cause." Sometimes it gives you surface level answers, but if you just keep asking - was it caused by a particular commit, a particular PR, or is it a flaky issue? - it really helps you dig into these nasty issues that are hard to dig into by hand. You would need to wade through a bunch of logs and that would be super painful to do manually, but Claude Code is able to handle a lot of that.
 
-I've packaged this workflow as a `/gha` slash command - just run `/gha <url>` with any GitHub Actions URL and it will automatically investigate the failure, check for flakiness, identify breaking commits, and suggest fixes. You can find it in the [commands folder](commands/gha.md), or install it via the [dx plugin](#tip-44-install-the-dx-plugin).
+I've packaged this workflow as a `/gha` slash command - just run `/gha <url>` with any GitHub Actions URL and it will automatically investigate the failure, check for flakiness, identify breaking commits, and suggest fixes. You can find it in the [skills folder](skills/gha/SKILL.md), or install it via the [dx plugin](#tip-44-install-the-dx-plugin).
 
 Once you identify what the particular problem was, you can just create a draft PR and go through some of the tips I mentioned earlier - check the output, make sure it looks good, let it verify its own outputs, and then turn it into a real PR to actually fix the issue. It's been working really well for me personally.
 
@@ -971,14 +971,14 @@ There are several effective ways to keep learning about Claude Code:
 
 This repo is also a Claude Code plugin called `dx` (developer experience). It bundles several tools from the tips above into a single install:
 
-| Command/Skill | Description |
-|---------------|-------------|
+| Skill | Description |
+|-------|-------------|
 | `/dx:gha <url>` | Analyze GitHub Actions failures (Tip 29) |
 | `/dx:handoff` | Create handoff documents for context continuity (Tip 8) |
 | `/dx:clone` | Clone conversations to branch off (Tip 23) |
 | `/dx:half-clone` | Half-clone to reduce context (Tip 23) |
-| `reddit-fetch` | Fetch Reddit content via Gemini CLI (Tip 11) - auto-invoked when needed |
-| `review-claudemd` | Review conversations to improve CLAUDE.md files (Tip 30) |
+| `/dx:reddit-fetch` | Fetch Reddit content via Gemini CLI (Tip 11) - auto-invoked when needed |
+| `/dx:review-claudemd` | Review conversations to improve CLAUDE.md files (Tip 30) |
 
 **Install with two commands:**
 

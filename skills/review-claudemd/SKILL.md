@@ -1,6 +1,6 @@
 ---
 name: review-claudemd
-description: Review recent conversations to find improvements for CLAUDE.md files. (user)
+description: Review recent conversations to find improvements for CLAUDE.md files.
 ---
 
 # Review CLAUDE.md from conversation history

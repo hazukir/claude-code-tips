@@ -1,6 +1,6 @@
 ---
 name: reddit-fetch
-description: Fetch content from Reddit using Gemini CLI when WebFetch is blocked. Use when accessing Reddit URLs, researching topics on Reddit, or when Reddit returns 403/blocked errors. (user)
+description: Fetch content from Reddit using Gemini CLI when WebFetch is blocked. Use when accessing Reddit URLs, researching topics on Reddit, or when Reddit returns 403/blocked errors.
 ---
 
 # Reddit Fetch via Gemini CLI
