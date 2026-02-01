@@ -41,6 +41,8 @@ Either run each step individually or put it in a script file and run with `bash 
 
 For git operations in other directories, use `cd <path> && git ...` instead of `git -C <path>`.
 
+Never use `2>&1` in bash commands. Keep stderr and stdout separate.
+
 # Safety
 
 **NEVER use `--dangerously-skip-permissions` on the host machine.**
