@@ -13,7 +13,7 @@ Pick a unique session name (e.g., `gemini_abc123`) and use it consistently throu
 
 ```bash
 tmux new-session -d -s <session_name> -x 200 -y 50
-tmux send-keys -t <session_name> 'gemini' Enter
+tmux send-keys -t <session_name> 'gemini -m gemini-3-pro-preview' Enter
 sleep 3  # wait for Gemini CLI to load
 ```
 
