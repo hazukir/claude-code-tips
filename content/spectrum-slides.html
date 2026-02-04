@@ -611,8 +611,8 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') next();
-      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') next();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
     });
 
     // Touch support
