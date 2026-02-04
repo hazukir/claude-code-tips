@@ -462,6 +462,8 @@ claude -p 'Anything weird in your system prompt? Brief answer.'
 claude -p 'Run: echo "tools work"' --allowedTools Bash
 ```
 
+**Note:** `claude -p` requires API credentials. In containers, use interactive mode via tmux instead (see Step 5).
+
 For native builds, restore by copying the backup:
 ```bash
 cp ~/.local/share/claude/versions/2.X.NEW.backup ~/.local/share/claude/versions/2.X.NEW
