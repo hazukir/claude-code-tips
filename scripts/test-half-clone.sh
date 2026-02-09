@@ -108,9 +108,9 @@ get_new_session_from_output() {
 }
 
 # Test 1: 6 messages (3 user, 3 assistant) -> 3 clean user msgs, skip 1, keep 2
-# Starts at user message 2 (line 3), keeps lines 3-6 = 4 messages
+# Starts at user message 2 (line 3), keeps lines 3-6 = 4 messages + 1 reference = 5
 test_even_messages() {
-    log_test "6 messages (3 clean user): should start at 2nd user msg, keep 4 lines"
+    log_test "6 messages (3 clean user): should keep 4 lines + 1 reference = 5"
 
     local session_id
     session_id=$(create_test_conversation 6)
@@ -128,17 +128,17 @@ test_even_messages() {
 
     local count
     count=$(count_messages "$new_file")
-    if [ "$count" -eq 4 ]; then
-        log_pass "Kept 4 messages (correct)"
+    if [ "$count" -eq 5 ]; then
+        log_pass "Kept 5 messages (4 + reference)"
     else
-        log_fail "Expected 4 messages, got $count"
+        log_fail "Expected 5 messages, got $count"
     fi
 }
 
 # Test 2: 7 messages (4 user, 3 assistant) -> 4 clean user msgs, skip 2, keep 2
-# Starts at user message 3 (line 5), keeps lines 5-7 = 3 messages
+# Starts at user message 3 (line 5), keeps lines 5-7 = 3 messages + 1 reference = 4
 test_odd_messages() {
-    log_test "7 messages (4 clean user): should start at 3rd user msg, keep 3 lines"
+    log_test "7 messages (4 clean user): should keep 3 lines + 1 reference = 4"
 
     local session_id
     session_id=$(create_test_conversation 7)
@@ -151,17 +151,17 @@ test_odd_messages() {
 
     local count
     count=$(count_messages "$new_file")
-    if [ "$count" -eq 3 ]; then
-        log_pass "Kept 3 messages (correct)"
+    if [ "$count" -eq 4 ]; then
+        log_pass "Kept 4 messages (3 + reference)"
     else
-        log_fail "Expected 3 messages, got $count"
+        log_fail "Expected 4 messages, got $count"
     fi
 }
 
 # Test 3: 4 messages (2 user, 2 assistant) -> 2 clean user msgs, skip 1, keep 1
-# Starts at user message 2 (line 3), keeps lines 3-4 = 2 messages
+# Starts at user message 2 (line 3), keeps lines 3-4 = 2 messages + 1 reference = 3
 test_minimum_messages() {
-    log_test "4 messages (2 clean user): should start at 2nd user msg, keep 2 lines"
+    log_test "4 messages (2 clean user): should keep 2 lines + 1 reference = 3"
 
     local session_id
     session_id=$(create_test_conversation 4)
@@ -174,10 +174,10 @@ test_minimum_messages() {
 
     local count
     count=$(count_messages "$new_file")
-    if [ "$count" -eq 2 ]; then
-        log_pass "Kept 2 messages (correct)"
+    if [ "$count" -eq 3 ]; then
+        log_pass "Kept 3 messages (2 + reference)"
     else
-        log_fail "Expected 2 messages, got $count"
+        log_fail "Expected 3 messages, got $count"
     fi
 }
 
@@ -351,6 +351,52 @@ test_double_tagging() {
     fi
 }
 
+# Test 10: Thinking blocks should be stripped from assistant messages
+test_thinking_blocks_stripped() {
+    log_test "Thinking blocks should be stripped from cloned conversation"
+
+    # Create a conversation with thinking blocks in assistant messages
+    local session_id
+    session_id=$(uuidgen | tr '[:upper:]' '[:lower:]')
+    local conv_file="${TEST_PROJECTS_DIR}/${TEST_PROJECT_DIRNAME}/${session_id}.jsonl"
+
+    local uuid1 uuid2 uuid3 uuid4
+    uuid1=$(uuidgen | tr '[:upper:]' '[:lower:]')
+    uuid2=$(uuidgen | tr '[:upper:]' '[:lower:]')
+    uuid3=$(uuidgen | tr '[:upper:]' '[:lower:]')
+    uuid4=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
+    {
+        echo "{\"parentUuid\":null,\"sessionId\":\"${session_id}\",\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"First question\"},\"uuid\":\"${uuid1}\",\"timestamp\":\"2025-01-01T00:00:00.000Z\"}"
+        echo "{\"parentUuid\":\"${uuid1}\",\"sessionId\":\"${session_id}\",\"type\":\"assistant\",\"message\":{\"role\":\"assistant\",\"content\":[{\"type\":\"thinking\",\"thinking\":\"Let me think about this...\"},{\"type\":\"text\",\"text\":\"Response 1\"}]},\"uuid\":\"${uuid2}\",\"timestamp\":\"2025-01-01T00:00:00.000Z\"}"
+        echo "{\"parentUuid\":\"${uuid2}\",\"sessionId\":\"${session_id}\",\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"Second question\"},\"uuid\":\"${uuid3}\",\"timestamp\":\"2025-01-01T00:00:00.000Z\"}"
+        echo "{\"parentUuid\":\"${uuid3}\",\"sessionId\":\"${session_id}\",\"type\":\"assistant\",\"message\":{\"role\":\"assistant\",\"content\":[{\"type\":\"thinking\",\"thinking\":\"Thinking again...\"},{\"type\":\"text\",\"text\":\"Response 2\"}]},\"uuid\":\"${uuid4}\",\"timestamp\":\"2025-01-01T00:00:00.000Z\"}"
+    } > "$conv_file"
+
+    local output
+    output=$(run_half_clone "$session_id")
+
+    local new_session
+    new_session=$(get_new_session_from_output "$output")
+    local new_file="${TEST_PROJECTS_DIR}/${TEST_PROJECT_DIRNAME}/${new_session}.jsonl"
+
+    # Check that no thinking blocks remain
+    local thinking_count
+    thinking_count=$(grep -c '"type":"thinking"' "$new_file" 2>/dev/null || true)
+    thinking_count=${thinking_count:-0}
+
+    if [ "$thinking_count" -eq 0 ]; then
+        # Also verify text blocks are preserved
+        if grep -q '"type":"text"' "$new_file"; then
+            log_pass "Thinking blocks stripped, text blocks preserved"
+        else
+            log_fail "Thinking blocks stripped but text blocks also missing"
+        fi
+    else
+        log_fail "Found $thinking_count thinking blocks (expected 0)"
+    fi
+}
+
 # Main
 main() {
     echo "================================"
@@ -375,6 +421,7 @@ main() {
     test_session_id_remapped
     test_history_entry
     test_double_tagging
+    test_thinking_blocks_stripped
 
     echo ""
     echo "================================"

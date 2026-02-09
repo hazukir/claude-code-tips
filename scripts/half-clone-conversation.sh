@@ -306,6 +306,46 @@ half_clone_conversation() {
         return ""
     }
 
+    # Strip thinking/redacted_thinking blocks from content arrays.
+    # These are ephemeral and cause API Error 400 when resuming:
+    # "thinking or redacted_thinking blocks in the latest assistant message
+    #  cannot be modified" (known Claude Code bug, see anthropics/claude-code#12311)
+    function strip_thinking(line,    start, pos, depth, in_str, ch, end_pos) {
+        while (1) {
+            start = index(line, "{\"type\":\"thinking\"")
+            if (start == 0) start = index(line, "{\"type\":\"redacted_thinking\"")
+            if (start == 0) break
+
+            # Walk forward from { to find matching }, handling strings
+            pos = start
+            depth = 0
+            in_str = 0
+            while (pos <= length(line)) {
+                ch = substr(line, pos, 1)
+                if (in_str) {
+                    if (ch == "\\" ) { pos++  }
+                    else if (ch == "\"") { in_str = 0 }
+                } else {
+                    if (ch == "\"") { in_str = 1 }
+                    else if (ch == "{") { depth++ }
+                    else if (ch == "}") { depth--; if (depth == 0) break }
+                }
+                pos++
+            }
+            end_pos = pos + 1
+
+            # Remove surrounding comma (before or after)
+            if (start > 1 && substr(line, start - 1, 1) == ",") {
+                start--
+            } else if (end_pos <= length(line) && substr(line, end_pos, 1) == ",") {
+                end_pos++
+            }
+
+            line = substr(line, 1, start - 1) substr(line, end_pos)
+        }
+        return line
+    }
+
     function halve_number(line, field,    pattern, num, halved) {
         pattern = "\"" field "\":[0-9]+"
         if (match(line, pattern)) {
@@ -372,6 +412,9 @@ half_clone_conversation() {
         line = halve_number(line, "input_tokens")
         line = halve_number(line, "cache_read_input_tokens")
         line = halve_number(line, "cache_creation_input_tokens")
+
+        # Strip thinking blocks
+        line = strip_thinking(line)
 
         print line
     }
