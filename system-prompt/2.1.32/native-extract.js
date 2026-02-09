@@ -10,14 +10,7 @@ const fs = require("fs");
 const BUN_TRAILER = Buffer.from("\n---- Bun! ----\n");
 const SIZEOF_OFFSETS = 32;
 const SIZEOF_STRING_POINTER = 8;
-const SIZEOF_MODULE_V1 = 4 * SIZEOF_STRING_POINTER + 4; // 36 bytes (Bun < 1.3.9)
-const SIZEOF_MODULE_V2 = 4 * SIZEOF_STRING_POINTER + 4 + 16; // 52 bytes (Bun >= 1.3.9, added extra field)
-
-function detectModuleSize(modulesListLength) {
-  if (modulesListLength % SIZEOF_MODULE_V2 === 0) return SIZEOF_MODULE_V2;
-  if (modulesListLength % SIZEOF_MODULE_V1 === 0) return SIZEOF_MODULE_V1;
-  return SIZEOF_MODULE_V1; // fallback
-}
+const SIZEOF_MODULE = 4 * SIZEOF_STRING_POINTER + 4;
 
 function parseStringPointer(buffer, offset) {
   return { offset: buffer.readUInt32LE(offset), length: buffer.readUInt32LE(offset + 4) };
@@ -108,11 +101,10 @@ function extract(binaryPath) {
   }
 
   const modulesListBytes = getStringPointerContent(bunData, bunOffsets.modulesPtr);
-  const moduleSize = detectModuleSize(modulesListBytes.length);
-  const modulesCount = Math.floor(modulesListBytes.length / moduleSize);
+  const modulesCount = Math.floor(modulesListBytes.length / SIZEOF_MODULE);
 
   for (let i = 0; i < modulesCount; i++) {
-    const module = parseModule(modulesListBytes, i * moduleSize);
+    const module = parseModule(modulesListBytes, i * SIZEOF_MODULE);
     const moduleName = getStringPointerContent(bunData, module.name).toString("utf-8");
     if (isClaudeModule(moduleName)) {
       return getStringPointerContent(bunData, module.contents);
