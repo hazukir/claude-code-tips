@@ -264,13 +264,23 @@ half_clone_conversation() {
     log_info "Pre-generating UUIDs..."
     pre_generate_uuids "$uuid_count" "$uuid_file"
 
+    # Prepend a synthetic user message so claude -r can find a firstPrompt
+    # within the first 16KB of the file (required for conversation listing).
+    local marker_uuid
+    marker_uuid=$(generate_uuid)
+    local marker_timestamp
+    marker_timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+    local marker_text="${clone_tag} Continued from session ${source_session}"
+    echo "{\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"${marker_text}\"},\"uuid\":\"${marker_uuid}\",\"parentUuid\":null,\"isSidechain\":false,\"userType\":\"external\",\"sessionId\":\"${new_session}\",\"timestamp\":\"${marker_timestamp}\"}" > "$target_file"
+
     # Process with awk - single pass, no external commands per line
     log_info "Processing with awk..."
     awk -v skip_count="$skip_count" \
          -v stop_at_line="$stop_at_line" \
          -v new_session="$new_session" \
          -v clone_tag="$clone_tag" \
-         -v uuid_file="$uuid_file" '
+         -v uuid_file="$uuid_file" \
+         -v marker_uuid="$marker_uuid" '
     BEGIN {
         first_message = 1
         first_user = 1
@@ -383,9 +393,11 @@ half_clone_conversation() {
 
         # Handle parentUuid
         if (first_message) {
-            # Nullify parentUuid for first message
-            gsub(/"parentUuid":"[a-f0-9-]*"/, "\"parentUuid\":null", line)
-            first_message = 0
+            # Point first parentUuid to the synthetic marker message
+            # (queue-operation messages may not have parentUuid, so keep trying)
+            if (gsub(/"parentUuid":"[a-f0-9-]*"/, "\"parentUuid\":\"" marker_uuid "\"", line) > 0) {
+                first_message = 0
+            }
         } else {
             old_parent = extract_uuid(line, "parentUuid")
             if (old_parent != "") {
@@ -418,7 +430,8 @@ half_clone_conversation() {
 
         print line
     }
-    ' "$source_file" > "$target_file"
+    ' "$source_file" >> "$target_file"
+
 
     # Append a reference message linking back to the original conversation
     # Find the last uuid in the cloned file (could be "uuid" or "leafUuid")
