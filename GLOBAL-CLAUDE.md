@@ -59,7 +59,7 @@ To list running safeclaw containers: `docker ps --filter "name=safeclaw-"`
 
 To create a new container: `cd /Users/yk/Desktop/projects/safeclaw && ./scripts/run.sh -s <name> -n`
 
-For read-only `gh` API calls on public repos, use a running safeclaw container: `docker exec safeclaw-<name> gh api <endpoint>`. If container `gh` lacks permissions, fall back to host `gh`.
+For read-only `gh` API calls on public repos, use a running safeclaw container: `docker exec safeclaw-<name> bash -c 'gh api <endpoint>'`. If container `gh` lacks permissions, fall back to host `gh`.
 
 ## URL Fetching
 
