@@ -85,7 +85,7 @@ function findClaudeCli() {
 }
 
 // Allow custom path for testing, otherwise find it dynamically
-const customPath = process.argv.find(a => !a.startsWith('--') && !a.includes('node') && !a.includes('patch-cli'));
+const customPath = process.argv.slice(2).find(a => !a.startsWith('--'));
 const basePath = customPath || findClaudeCli();
 
 if (!basePath) {
