@@ -447,7 +447,7 @@ half_clone_conversation() {
     ref_uuid=$(generate_uuid)
     local ref_timestamp
     ref_timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
-    local ref_text="Note: this is a half-clone that only contains the later half of the original conversation. To see the full original conversation, check session \`${source_session}\` at: ${source_file}"
+    local ref_text="The half-clone is complete. This conversation now only contains the later half of the original - earlier context was removed to free up space. Just continue working from where you left off. Original session: \`${source_session}\` at: ${source_file}"
     echo "{\"parentUuid\":\"${last_uuid}\",\"isSidechain\":false,\"userType\":\"external\",\"sessionId\":\"${new_session}\",\"type\":\"assistant\",\"message\":{\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"${ref_text}\"}]},\"uuid\":\"${ref_uuid}\",\"timestamp\":\"${ref_timestamp}\",\"isMeta\":true}" >> "$target_file"
 
     local output_line_count
